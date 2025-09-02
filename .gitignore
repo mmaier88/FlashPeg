@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+lib/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+out/
+dist/
+cache/
+artifacts/
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Deployments
+deployments/*.env
+broadcast/
+
+# Coverage
+coverage/
+coverage.json
+
+# Keys - NEVER commit!
+*.pem
+*.key
+*.p12
+
+# Temporary files
+*.tmp
+tmp/

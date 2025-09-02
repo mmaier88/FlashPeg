@@ -1,0 +1,27 @@
+{
+  "name": "flashpeg-arbitrage",
+  "version": "1.0.0",
+  "description": "Flash loan arbitrage bot for stETH/ETH and DAI peg arbitrage",
+  "main": "keeper/src/index.ts",
+  "scripts": {
+    "build": "forge build",
+    "test": "forge test",
+    "test:fork": "forge test --fork-url $MAINNET_RPC_URL",
+    "deploy": "forge script scripts/Deploy.s.sol --rpc-url $MAINNET_RPC_URL --broadcast",
+    "keeper": "ts-node keeper/src/index.ts",
+    "keeper:dev": "nodemon --watch keeper --exec ts-node keeper/src/index.ts"
+  },
+  "dependencies": {
+    "ethers": "^6.9.0",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.2",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2",
+    "nodemon": "^3.0.2",
+    "@types/winston": "^2.4.4"
+  }
+}
