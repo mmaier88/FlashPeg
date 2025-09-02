@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  keeper:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MAINNET_RPC_URL=${MAINNET_RPC_URL}
+      - KEEPER_PRIVATE_KEY=${KEEPER_PRIVATE_KEY}
+      - ARB_STETH_CONTRACT=${ARB_STETH_CONTRACT}
+      - ARB_DAI_CONTRACT=${ARB_DAI_CONTRACT}
+      - MIN_PROFIT_USD=100
+      - MAX_GAS_PRICE_GWEI=50
+      - POLL_INTERVAL_MS=5000
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
