@@ -1,6 +1,6 @@
 services:
   - type: worker
-    name: flashpeg-keeper
+    name: flashpeg-keeper-python
     runtime: python
     repo: https://github.com/mmaier88/FlashPeg.git
     branch: main
@@ -25,6 +25,5 @@ services:
         value: "50"
       - key: POLL_INTERVAL_MS
         value: "5000"
-      - key: LOG_LEVEL
-        value: info
     autoDeploy: true
+    region: oregon
