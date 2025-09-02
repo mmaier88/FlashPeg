@@ -1,156 +1,101 @@
-# Deployment Guide for Render
+# 🚀 FlashPeg One-Click Deployment Guide
 
-## Prerequisites
+Deploy your FlashPeg arbitrage bot to Render in minutes!
 
-1. **Deploy Smart Contracts First**
-   - Deploy the arbitrage contracts to mainnet using the deployment scripts
-   - Note down the deployed contract addresses
+## Quick Deploy Options
 
-2. **Required Environment Variables**
-   - `MAINNET_RPC_URL`: Your Ethereum mainnet RPC endpoint (Infura, Alchemy, etc.)
-   - `KEEPER_PRIVATE_KEY`: Private key for the keeper wallet (with ETH for gas)
-   - `ARB_STETH_CONTRACT`: Deployed ArbStETH contract address
-   - `ARB_DAI_CONTRACT`: Deployed ArbDaiPeg contract address
+### Option 1: One-Click Deploy Button (Recommended)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mmaier88/FlashPeg)
 
-## Deployment Steps
+Click the button above to deploy instantly to Render using our pre-configured `app.json`.
 
-### 1. Deploy Smart Contracts
+### Option 2: Automated Script
+Run our automated deployment script:
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
 
+The script will:
+- Install Render CLI if needed
+- Authenticate with your Render account  
+- Deploy FlashPeg automatically
+- Provide your live app URL
+
+### Option 3: Manual Render Dashboard
+1. Fork this repository to your GitHub
+2. Go to [Render Dashboard](https://dashboard.render.com/)
+3. Click "New" → "Web Service"
+4. Connect your forked repository
+5. Use these settings:
+   - **Runtime**: Python 3
+   - **Build Command**: `pip install -r requirements-flask.txt`
+   - **Start Command**: `gunicorn wsgi:app`
+   - **Health Check**: `/health`
+
+## After Deployment
+
+### 1. Verify Deployment
+Run the verification script:
+```bash
+chmod +x verify-deployment.sh
+./verify-deployment.sh https://your-app.onrender.com
+```
+
+### 2. Configure Environment Variables
+Add these in your Render dashboard under Environment:
+
+**Required for Trading:**
+- `MAINNET_RPC_URL` - Your Ethereum RPC URL (Alchemy/Infura)
+- `KEEPER_PRIVATE_KEY` - Private key for keeper wallet
+
+**Contract Addresses (after deployment):**
+- `ARB_STETH_CONTRACT` - Deployed stETH arbitrage contract
+- `ARB_DAI_CONTRACT` - Deployed DAI arbitrage contract
+
+**Optional Settings:**
+- `MIN_PROFIT_USD` - Minimum profit threshold (default: 100)
+- `MAX_GAS_PRICE_GWEI` - Max gas price (default: 50)
+
+### 3. Deploy Smart Contracts
 ```bash
 # Install dependencies
 npm install
-forge install
 
-# Deploy to mainnet
-forge script scripts/Deploy.s.sol --rpc-url $MAINNET_RPC_URL --broadcast --verify
-
-# Note the deployed contract addresses from the output
+# Deploy contracts (testnet first!)
+npx hardhat deploy --network goerli
+npx hardhat deploy --network mainnet
 ```
 
-### 2. Deploy to Render
-
-#### Option A: Using Render Dashboard
-
-1. Go to [Render Dashboard](https://dashboard.render.com/)
-2. Click "New +" → "Background Worker"
-3. Connect your GitHub account
-4. Select the `FlashPeg` repository
-5. Configure the service:
-   - **Name**: flashpeg-keeper
-   - **Environment**: Node
-   - **Build Command**: `npm install && npm run build:keeper`
-   - **Start Command**: `npm run keeper:prod`
-6. Add environment variables:
-   - `MAINNET_RPC_URL`: Your RPC URL
-   - `KEEPER_PRIVATE_KEY`: Your keeper wallet private key (mark as secret)
-   - `ARB_STETH_CONTRACT`: Your deployed stETH arbitrage contract
-   - `ARB_DAI_CONTRACT`: Your deployed DAI arbitrage contract
-   - `MIN_PROFIT_USD`: 100 (or your preference)
-   - `MAX_GAS_PRICE_GWEI`: 50 (or your preference)
-   - `POLL_INTERVAL_MS`: 5000 (or your preference)
-7. Click "Create Background Worker"
-
-#### Option B: Using render.yaml (Blueprint)
-
-1. Fork or use this repository
-2. Go to [Render Dashboard](https://dashboard.render.com/)
-3. Click "New +" → "Blueprint"
-4. Connect the `FlashPeg` repository
-5. Choose deployment type:
-   - **render.yaml**: Background worker (no health checks, lower cost)
-   - **render-web.yaml**: Web service (with health checks, slightly higher cost)
-6. Configure the required environment variables
-7. Deploy
-
-**Note**: Workers don't support health check paths. Use `render-web.yaml` if you need HTTP health monitoring.
-
-### 3. Monitor Deployment
-
-1. Check the Render dashboard for deployment status
-2. View logs to ensure the keeper is running properly
-3. Monitor the health endpoint: `https://your-service.onrender.com/health`
-
-## Post-Deployment
-
-### Monitoring
-
-- **Health Check**: `https://your-service.onrender.com/health`
-- **Metrics**: `https://your-service.onrender.com/metrics`
-- **Logs**: Available in Render dashboard
-
-### Updating Configuration
-
-To update environment variables:
-1. Go to your service in Render dashboard
-2. Navigate to "Environment" tab
-3. Update variables as needed
-4. Service will automatically redeploy
-
-### Scaling
-
-For production use:
-1. Consider upgrading to a paid Render plan for better performance
-2. Use multiple keeper instances in different regions
-3. Implement redundancy with multiple RPC providers
-
-## Security Considerations
-
-1. **Never commit private keys** to the repository
-2. Use Render's secret environment variables for sensitive data
-3. Regularly rotate keeper wallet private keys
-4. Monitor wallet balance for gas
-5. Set up alerts for failed transactions
+### 4. Monitor Your Bot
+- **Live App**: `https://your-app.onrender.com`
+- **Health Check**: `https://your-app.onrender.com/health`
+- **Render Logs**: [Dashboard](https://dashboard.render.com/)
 
 ## Troubleshooting
 
-### Common Issues
+### Deployment Issues
+- Use `verify-deployment.sh` to diagnose problems
+- Check Render logs for detailed errors
+- Ensure all required files are in repository
 
-1. **"Missing required environment variables"**
-   - Ensure all required env vars are set in Render dashboard
-   
-2. **"Insufficient funds for gas"**
-   - Add ETH to your keeper wallet
-   
-3. **"RPC rate limit exceeded"**
-   - Upgrade your RPC plan or increase POLL_INTERVAL_MS
-   
-4. **Health check failing**
-   - Check logs for initialization errors
-   - Verify contract addresses are correct
-   - Ensure RPC URL is valid
+### Runtime Issues
+- Verify RPC URL is working
+- Check private key has sufficient ETH for gas
+- Monitor gas prices vs MAX_GAS_PRICE_GWEI
 
-## Maintenance
-
-### Regular Tasks
-
-1. Monitor keeper wallet balance
-2. Check logs for errors
-3. Update gas price limits based on network conditions
-4. Review and update minimum profit thresholds
-5. Upgrade dependencies regularly
-
-### Updating the Bot
-
-```bash
-# Make changes locally
-git add .
-git commit -m "Update keeper logic"
-git push origin main
-
-# Render will automatically redeploy
-```
-
-## Cost Considerations
-
-- **Render Costs**: ~$7-25/month for worker
-- **RPC Costs**: Varies by provider ($50-500/month)
-- **Gas Costs**: Depends on arbitrage frequency
-- **Profit**: Should exceed operational costs
+### Performance
+- App cold starts may take 30-60 seconds
+- Consider upgrading to paid Render plan for faster startups
+- Monitor response times with verification script
 
 ## Support
 
-For issues:
-1. Check Render logs
-2. Review health endpoint response
-3. Verify environment variables
-4. Check smart contract state on Etherscan
+- 📖 **Documentation**: Check README.md
+- 🔧 **Issues**: Open GitHub issues
+- 📊 **Monitoring**: Use Render dashboard logs
+- 💡 **Tips**: Run verification script regularly
+
+---
+
+**Ready to start arbitraging?** Click the Deploy to Render button above! 🚀
