@@ -4,10 +4,10 @@ Deploy your FlashPeg arbitrage bot to Render in minutes!
 
 ## Quick Deploy Options
 
-### Option 1: One-Click Deploy Button (Recommended)
+### Option 1: One-Click Blueprint Deploy (Recommended)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mmaier88/FlashPeg)
 
-Click the button above to deploy instantly to Render using our pre-configured `app.json`.
+Click the button above to deploy instantly to Render using our pre-configured `render.yaml` Blueprint.
 
 ### Option 2: Automated Script
 Run our automated deployment script:
