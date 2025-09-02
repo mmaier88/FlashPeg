@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: flashpeg-keeper-fixed
+    runtime: python
+    repo: https://github.com/mmaier88/FlashPeg.git
+    branch: main
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: python keeper.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.10"
+      - key: PORT
+        generateValue: true
+      - key: MAINNET_RPC_URL
+        sync: false
+      - key: KEEPER_PRIVATE_KEY
+        sync: false
+      - key: ARB_STETH_CONTRACT
+        value: ""
+      - key: ARB_DAI_CONTRACT  
+        value: ""
+      - key: MIN_PROFIT_USD
+        value: "100"
+      - key: MAX_GAS_PRICE_GWEI
+        value: "50" 
+      - key: POLL_INTERVAL_MS
+        value: "5000"
+    healthCheckPath: /health
+    autoDeploy: true
