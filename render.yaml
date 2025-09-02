@@ -2,26 +2,11 @@ services:
   - type: web
     name: flashpeg-arbitrage
     runtime: python
-    repo: https://github.com/mmaier88/FlashPeg.git
-    branch: main
     buildCommand: pip install -r requirements-flask.txt
     startCommand: gunicorn wsgi:app
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
         value: "3.9"
-      - key: PORT
-        generateValue: true
-      - key: MAINNET_RPC_URL
-        value: ""
-      - key: KEEPER_PRIVATE_KEY
-        value: ""  
-      - key: ARB_STETH_CONTRACT
-        value: ""
-      - key: ARB_DAI_CONTRACT
-        value: ""
-      - key: MIN_PROFIT_USD
-        value: "100"
-      - key: MAX_GAS_PRICE_GWEI
-        value: "50"
-    healthCheckPath: /health
-    autoDeploy: true
