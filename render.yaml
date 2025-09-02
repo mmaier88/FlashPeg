@@ -3,10 +3,9 @@ services:
     name: flashpeg-arbitrage
     runtime: python
     buildCommand: pip install -r requirements-flask.txt
-    startCommand: gunicorn wsgi:app
-    plan: free
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT
     healthCheckPath: /health
     autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
-        value: "3.9"
+        value: "3.11"
