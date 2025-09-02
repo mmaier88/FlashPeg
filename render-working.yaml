@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: flashpeg-keeper
+    name: flashpeg-keeper-working
     runtime: python
     repo: https://github.com/mmaier88/FlashPeg.git
     branch: main
@@ -16,16 +16,15 @@ services:
       - key: KEEPER_PRIVATE_KEY
         sync: false
       - key: ARB_STETH_CONTRACT
-        sync: false
+        value: ""
       - key: ARB_DAI_CONTRACT
-        sync: false
+        value: ""
       - key: MIN_PROFIT_USD
         value: "100"
       - key: MAX_GAS_PRICE_GWEI
         value: "50"
       - key: POLL_INTERVAL_MS
         value: "5000"
-      - key: LOG_LEVEL
-        value: info
     healthCheckPath: /health
     autoDeploy: true
+    region: oregon

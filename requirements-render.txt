@@ -1,0 +1,9 @@
+# Fixed requirements for Render deployment
+web3==6.11.3
+python-dotenv==1.0.0
+requests==2.31.0
+
+# These are pulled in by web3 but pinning for stability
+eth-account==0.10.0
+eth-utils==2.3.1
+hexbytes==0.3.1
