@@ -56,9 +56,13 @@ forge script scripts/Deploy.s.sol --rpc-url $MAINNET_RPC_URL --broadcast --verif
 2. Go to [Render Dashboard](https://dashboard.render.com/)
 3. Click "New +" → "Blueprint"
 4. Connect the `FlashPeg` repository
-5. Render will automatically detect the `render.yaml` file
+5. Choose deployment type:
+   - **render.yaml**: Background worker (no health checks, lower cost)
+   - **render-web.yaml**: Web service (with health checks, slightly higher cost)
 6. Configure the required environment variables
 7. Deploy
+
+**Note**: Workers don't support health check paths. Use `render-web.yaml` if you need HTTP health monitoring.
 
 ### 3. Monitor Deployment
 
